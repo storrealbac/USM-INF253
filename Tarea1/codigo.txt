@@ -8,7 +8,7 @@ Pintar Negro
 Derecha Avanzar 3
 Pintar Negro Avanzar
 Repetir 2 veces { Pintar Negro Derecha Avanzar }
-Pintar Negro
+Pintar Rojo
 
 Izquierda Avanzar
 Repetir 3 veces { Avanzar Pintar Negro }
