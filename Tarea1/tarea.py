@@ -1,38 +1,15 @@
+from dis import Instruction
 import re
-import numpy
-
-# Verifica si la posición que va leyendo
-# no se sale de los limites de los tokens
-# existentes
-def outOfBounds(line, pos, tokens):
-    if line < 0 or pos < 0:
-        return True
-    
-    if len(tokens) <= line:
-        return True
-
-    if len(tokens[line]) <= pos:
-        return True
-    
-    return False
+import numpy as np
+from PIL import Image # pip install Pllow
 
 def prevPos(line, pos, tokens):
-
-    print("out of range: ", line-1)
-
-    if line-1 >= 0:
-        print(tokens[line-1])
-        if tokens[line-1] == []:
-            while tokens[line-1] != []:
-                line -= 1
-
-            return (line-1, len(tokens[line-1])-1)
 
     # Al restarle uno quedaria fuera de los bounds
     # asi que veremos si podemos ir a la linea anterior
     if pos == 0:
         # Si la linea es la primera, va tirar un error
-        if line-1 < 0:
+        if line-1 <= -1:
             return (-1, -1)
         else:
             # Retrocede a la linea anterior
@@ -45,17 +22,19 @@ def prevPos(line, pos, tokens):
 # que corresponde a la siguiente posición válida
 def nextPos(line, pos, tokens):
     
-    # En caso de que sea una linea vacia (sin tokens), ignorarla
-    if line+1 < len(tokens) and tokens[line+1] == []:
-        return (line+1, 0)
-        
     # Si se sale de los tokens de la lista
     # se va a la lista siguiente
-    if outOfBounds(line, pos+1, tokens):
-        if outOfBounds(line+1, 0, tokens):
-            # Si no hay lista siguiente, se retorna -1 como fin
-            return (-1, -1)
-        else:   
+    if len(tokens[line])-1 == pos:
+
+        while True:
+            if len(tokens)-1 == line:
+                # Si no hay lista siguiente, se retorna -1 como fin
+                return (-1, -1)
+
+            if tokens[line+1] == []:
+                line += 1
+                continue
+
             # se va a la lista siguiente
             return (line+1, 0)
 
@@ -85,7 +64,7 @@ def obtenerColor(color):
     return (-1, -1, -1)
 
 def verificarNumero(str):
-    return re.match("\d*", str)
+    return re.match("[1-9]+", str)
 
 # Leer el archivo
 file = open("codigo.txt", "r")
@@ -104,12 +83,17 @@ used_open_bracket = []
 # Te devuelve la posición del '{' en la lista de tokens
 closed_bracket = {}
 
+# Guarda el valor original que existia en el bucle
+# (Esto es para poder tener ciclos anidados)
+repeat_count = {}
+
 for line in file:
     # Tokenizamos la linea
     line_token = re.findall(tokenizer_regex, line)
 
     tokens.append(line_token)
     lines.append(line)
+
 
 def esNumero(str_numero):
     if re.match("\d{1,}", str_numero):
@@ -135,8 +119,56 @@ def aplicarIteracion(bracket_pos, closed_bracket, tokens):
     line, pos = open_bracket_pos
     number = int(tokens[line][pos-2])
     tokens[line][pos-2] = str(number-1)
-
     return tokens
+
+def nuevaDireccion(dy, dx, direccion):
+
+    siguiente_derecha = {
+        (-1, 0): (0, 1),
+        (0, 1): (1, 0),
+        (1, 0): (0, -1),
+        (0, -1): (-1, 0)
+    }
+
+    siguiente_izquierda = {
+        (0, 1): (-1, 0),
+        (1, 0): (0, 1),
+        (0, -1): (1, 0),
+        (-1, 0): (0, -1)
+    }
+
+    # Si la direccion es Izquierda
+    if direccion == "Izquierda":
+        if (dy, dx) in siguiente_izquierda:
+            return siguiente_izquierda[(dy, dx)]
+
+    elif direccion == "Derecha":
+        if (dy, dx) in siguiente_derecha:
+            return siguiente_derecha[(dy, dx)]
+
+    # En caso que no sea ninguna de las dos
+    return (0, 0)
+
+
+# Codigo del Github
+def MatrizAImagen(matriz, filename='pixelart.png', factor=10):
+    '''
+    Convierte una matriz de valores RGB en una imagen y la guarda como un archivo png.
+    Las imagenes son escaladas por un factor ya que con los ejemplos se producirian imagenes muy pequeñas.
+        Parametros:
+                matriz (lista de lista de tuplas de enteros): Matriz que representa la imagen en rgb.
+                filename (str): Nombre del archivo en que se guardara la imagen.
+                factor (int): Factor por el cual se escala el tamaño de las imagenes.
+    '''
+    matriz = np.array(matriz, dtype=np.uint8)
+    np.swapaxes(matriz, 0, -1)
+
+    N = np.shape(matriz)[0]
+
+    img = Image.fromarray(matriz, 'RGB')
+    img = img.resize((N*10, N*10), resample=Image.BICUBIC)
+    img.save(filename)
+
 
 # ---- INICIO DEL PROGRAMA ----
 
@@ -146,27 +178,39 @@ ANCHO = int(tokens[0][1])
 # Leemos la segunda linea y el ultimo tokens
 COLOR_DE_FONDO = obtenerColor(tokens[1][-1])
 
+# Esta sera nuestra matriz donde guardaremos los pixeles
+data = []
+
+for i in range(ANCHO):
+    row = []
+    for j in range(ANCHO):
+        row.append(COLOR_DE_FONDO)
+    data.append(row)
+
+print(data)
 
 # Posición actual despues de haber leido
 # el archivo
-
-# Acá diremos en que posición corresponde cada
-# bracket que hemos cerrado
-line = 2
+line = 3
 pos = 0
 
-print("1")
+# Direccion de nuestro jugador
+dy = 0
+dx = 1
+
+# Posicion de nuestro jugador
+y = 0
+x = 0
+
+# Leemos el texto una vez para encontrar informacion
+# y guardarla cuando sea pertinente
 while True:
     # El caso cuando ya no hay más tokens a leer
     if line == -1:
         break
-    
-    # Ignoro las lineas sin instrucciones
-    if len(tokens[line]) == 0:
-        line, pos = nextPos(line, pos, tokens)
-        continue
 
     token = tokens[line][pos]
+
 
     # Encontró una llave cerrada
     if token == "}":
@@ -179,11 +223,6 @@ while True:
             if bline == -1 or bpos == -1:
                 break
 
-            # Ignoro las lineas sin instrucciones
-            if len(tokens[bline]) == 0:
-                bline, bpos = prevPos(bline, bpos, tokens)
-                continue
-
             btoken = tokens[bline][bpos]
 
             if btoken == "{":
@@ -195,13 +234,31 @@ while True:
                     
             bline, bpos = prevPos(bline, bpos, tokens)
 
+    elif token == "Repetir":
+        # Revisamos si el siguiente token es un numero,
+        # Si es un numero, lo guardamos en la posicion
+        bline, bpos = line, pos
+        
+        bline, bpos = nextPos(line, pos, tokens)
+
+        if bline == -1 or bpos == -1:
+            break
+
+        btoken = tokens[bline][bpos]
+
+        # Si efectivamente el token era un numero, entonces
+        # lo colocaremos en la cuenta original
+        if verificarNumero(btoken):
+            repeat_count[(bline, bpos)] = btoken
+
     line, pos = nextPos(line, pos, tokens)
-print("2")
+
 print(closed_bracket)
+print(repeat_count)
 
 # Volvemos a setear los valores iniciales
 # para poder correr el código
-line = 2
+line = 3
 pos = 0
 while True:
 
@@ -209,20 +266,11 @@ while True:
     if line == -1:
         break
 
-    # Ignoro las lineas sin instrucciones
-    if len(tokens[line]) == 0:
-        line, pos = nextPos(line, pos, tokens)
-        continue
-
     instruccion = tokens[line][pos]
 
-    print(instruccion)
-
     # Arbol sintactico de instrucciones
-    if instruccion == "Izquierda":
-        pass
-    elif instruccion == "Derecha":
-        pass
+    if instruccion == "Izquierda" or instruccion == "Derecha":
+        dy, dx = nuevaDireccion(dy, dx, instruccion)
     elif instruccion == "Avanzar":
         line, pos = nextPos(line, pos, tokens)
         
@@ -237,14 +285,24 @@ while True:
             # Mover y pintar numero posiciones
             numero = int(numero)
 
+            # Avanzamos
+            print("Avance en Y:", dy*numero)
+            print("Avance en X:", dx*numero)
+            y += (dy * numero)
+            x += (dx * numero)
+
         else:
             # En caso contrario solo mover 1 y retroceder
             # el puntero de los tokens
-            line, pos = prevPos(line, pos, token)
+            
+            # Solo avanzamos uno
+            y += dy
+            x += dx
+
+            line, pos = prevPos(line, pos, tokens)
 
     elif instruccion == "Pintar":
         line, pos = nextPos(line, pos, tokens)
-        
         if line == -1 or pos == -1:
             # Habria un error
             break
@@ -254,7 +312,11 @@ while True:
 
         if color_tupla == (-1, -1, -1):
             # Habria un error
-            pass
+            break
+
+        print("Posiciones:", (y, x))
+        # Cambiamos el color dependiendo el color de la tupla
+        data[y][x] = color_tupla
 
     elif instruccion == "Repetir":
 
@@ -270,15 +332,15 @@ while True:
         # Actualizo la nueva instruccion
         cantidad = tokens[line][pos]
 
-        if esNumero(cantidad):
-
-            # Reconoce que es un int
-            cantidad = int(cantidad)
-        else:
+        if not esNumero(cantidad):
             # Acá habria un error
             break
 
-        # Esta parte reconoce si el siguiente tokens es un "veces"
+        # Seteamos la cantidad original de veces que hay que repetir;
+        # Esto lo hacemos por si hay ciclos anidados y no se pierda la informacion
+        tokens[line][pos] = repeat_count[(line, pos)]
+
+        # --- Esta parte reconoce si el siguiente tokens es un "veces" --- 
         line, pos = nextPos(line, pos, tokens)
 
         if line == -1 or pos == -1:
@@ -289,12 +351,22 @@ while True:
         if tokens[line][pos] != "veces":
             # Hay error
             break
-        
-        # Desde aca hay que revisar recursivamente
+    
+    if instruccion == "}":
+        # Aca hay que mover el puntero (line, pos)
+        # a la posicion que corresponda, siempre y cuando
+        # el contador del repetir sea > 0
+        restante = obtenerIteracionesRestantes((line, pos), closed_bracket, tokens)
+
+        # Si hay iteraciones restantes, se devuelve el puntero
+        if restante-1 > 0:
+            aplicarIteracion((line, pos), closed_bracket, tokens)
+            line, pos = closed_bracket[(line, pos)]
 
     else:
-
         # Aca habria un error
         pass
-    #print(tokens[line][pos])
+    
     line, pos = nextPos(line, pos, tokens)
+
+MatrizAImagen(data)
