@@ -552,3 +552,6 @@ for i in range(ANCHO):
         print(data[i][j], end="\t")
     print()
 MatrizAImagen(data)
+
+file.close()
+errors_file.close()
