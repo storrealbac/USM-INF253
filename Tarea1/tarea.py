@@ -3,7 +3,7 @@ import numpy as np
 from PIL import Image
 
 # Expresiones regulares
-RE_Avanzar      = "(Avanzar( \d+)*)"
+RE_Avanzar      = "(Avanzar( \d+)?)"
 RE_Direccion    = "(Izquierda|Derecha)"
 RE_Colores      = "(Rojo|Verde|Azul|Negro|Blanco)"
 RE_RGB          = "(RGB\(\d{1,3},\d{1,3},\d{1,3}\))"
