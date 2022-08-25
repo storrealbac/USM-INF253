@@ -3,16 +3,19 @@ import numpy as np
 from PIL import Image
 
 # Expresiones regulares
-RE_Avanzar      = "(Avanzar( \d+)?)"
+RE_Avanzar      = "(Avanzar(\s\d+)?)"
 RE_Direccion    = "(Izquierda|Derecha)"
 RE_Colores      = "(Rojo|Verde|Azul|Negro|Blanco)"
 RE_RGB          = "(RGB\(\d{1,3},\d{1,3},\d{1,3}\))"
-RE_Repetir      = "(Repetir \d+ veces( {)*)"
-RE_Pintar       = f"(Pintar ({RE_Colores}|{RE_RGB}))"
+RE_Repetir      = "(Repetir\s\d+ veces(\s{)*)"
+RE_Pintar       = f"(Pintar\s({RE_Colores}|{RE_RGB}))"
 RE_Llaves       = "(})|(\s*{)"
 RE_Espacios     = "(\s)"
 RE_Numero       = "\d+"
 RE_Digitos      = "(\d+)+"
+
+RE_ConfigAncho = "Ancho \d+"
+RE_ConfigColorFondo = f"Color de fondo ({RE_Colores}|{RE_RGB})"
 
 # Regex que abarca todos los anteriores para considerar una linea valida
 RE_Global = "("
@@ -27,13 +30,15 @@ RE_Global += RE_Espacios
 RE_Global += ")*"
 
 # Compilamos los Regex necesarios
-RE_Global   = re.compile(RE_Global)
-RE_Direccion= re.compile(RE_Direccion)
-RE_RGB      = re.compile(RE_RGB)
-RE_Colores  = re.compile(RE_Colores)
-RE_Numero   = re.compile(RE_Numero)
-RE_Digitos  = re.compile(RE_Digitos)
-RE_Avanzar  = re.compile(RE_Avanzar)
+RE_Global           = re.compile(RE_Global)
+RE_Direccion        = re.compile(RE_Direccion)
+RE_RGB              = re.compile(RE_RGB)
+RE_Colores          = re.compile(RE_Colores)
+RE_Numero           = re.compile(RE_Numero)
+RE_Digitos          = re.compile(RE_Digitos)
+RE_Avanzar          = re.compile(RE_Avanzar)
+RE_ConfigAncho      = re.compile(RE_ConfigAncho)
+RE_ConfigColorFondo = re.compile(RE_ConfigColorFondo)
 
 """
     Funciones necesarias para el correcto funcionamiento
@@ -397,6 +402,17 @@ while True:
 
     line, pos = nextPos(line, pos, tokens)
 
+if len(lines) <= 2:
+    print("Ha ocurrido un error inesperado: No están las dos primeras lineas necesarias para la configuración del archivo \n")
+    quit()
+
+
+if not RE_ConfigAncho.match(lines[0]):
+    errors.append(f"1 {lines[0]}")
+
+if not RE_ConfigColorFondo.match(lines[1]):
+    errors.append(f"2 {lines[1]}")
+
 # Ordenamos la lista de errors para que se vea de forma secuencial
 errors.sort()
 
@@ -412,13 +428,15 @@ for err in errors:
 if errors[0] != "No hay errores!":
     quit()
 
+file.close()
+errors_file.close()
+
 """
     INICIO DE LA EJECUCIÓN DEL CODIGO.TXT
 """
 
 # Leemos la primera linea y el segundo tokens
 ANCHO = int(tokens[0][1])
-
 # Leemos la segunda linea y el ultimo tokens
 COLOR_DE_FONDO = obtenerColor(tokens[1][-1])
 
@@ -552,6 +570,3 @@ for i in range(ANCHO):
         print(data[i][j], end="\t")
     print()
 MatrizAImagen(data)
-
-file.close()
-errors_file.close()
