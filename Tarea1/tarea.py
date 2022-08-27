@@ -3,19 +3,19 @@ import numpy as np
 from PIL import Image
 
 # Expresiones regulares
-RE_Avanzar      = "(Avanzar(\s\d+)?)"
+RE_Avanzar      = "(Avanzar(\s+\d+)?)"
 RE_Direccion    = "(Izquierda|Derecha)"
 RE_Colores      = "(Rojo|Verde|Azul|Negro|Blanco)"
-RE_RGB          = "(RGB\(\d{1,3},\d{1,3},\d{1,3}\))"
-RE_Repetir      = "(Repetir\s\d+ veces(\s{)*)"
-RE_Pintar       = f"(Pintar\s({RE_Colores}|{RE_RGB}))"
+RE_RGB          = "(RGB\([1-9]\d{1,2},[1-9]\d{1,2},[1-9]\d{1,2}\))"
+RE_Repetir      = "(Repetir\s+\d+ veces(\s+{)*)"
+RE_Pintar       = f"(Pintar\s+({RE_Colores}|{RE_RGB}))"
 RE_Llaves       = "(})|(\s*{)"
 RE_Espacios     = "(\s)"
 RE_Numero       = "\d+"
 RE_Digitos      = "(\d+)+"
 
-RE_ConfigAncho = "Ancho \d+"
-RE_ConfigColorFondo = f"Color de fondo ({RE_Colores}|{RE_RGB})"
+RE_ConfigAncho = "Ancho\s+\d+"
+RE_ConfigColorFondo = f"Color\s+de\s+fondo\s+({RE_Colores}|{RE_RGB})"
 
 # Regex que abarca todos los anteriores para considerar una linea valida
 RE_Global = "("
