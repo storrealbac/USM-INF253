@@ -6,11 +6,11 @@ from PIL import Image
 RE_Avanzar      = "(Avanzar(\s+\d+)?)"
 RE_Direccion    = "(Izquierda|Derecha)"
 RE_Colores      = "(Rojo|Verde|Azul|Negro|Blanco)"
-RE_RGB          = "(RGB\([1-9]\d{1,2},[1-9]\d{1,2},[1-9]\d{1,2}\))"
+RE_RGB          = "(RGB\((0|[1-9]\d{1,2}),(0|[1-9]\d{1,2}),(0|[1-9]\d{1,2})\))"
 RE_Repetir      = "(Repetir\s+\d+ veces(\s+{)*)"
 RE_Pintar       = f"(Pintar\s+({RE_Colores}|{RE_RGB}))"
 RE_Llaves       = "(})|(\s*{)"
-RE_Espacios     = "(\s)"
+RE_Espacios     = "(\s*)"
 RE_Numero       = "\d+"
 RE_Digitos      = "(\d+)+"
 
@@ -204,7 +204,6 @@ def obtenerIteracionesRestantes(bracket_pos, closed_bracket, tokens):
     return int(number)
 
 def aplicarIteracion(bracket_pos, closed_bracket, tokens):
-
     """
         Reduce en 1 la cantidad de iteración para el ciclo, para eso
         toma en referencia la llave cerrada para saber a que ciclo pertenece
@@ -243,7 +242,6 @@ def nuevaDireccion(dy, dx, direccion):
         Retorno:
             (int, int): Devuelve la nueva dirección del jugador
     """
-
     # Los posibles movimientos 
     siguiente_derecha = {
         (-1, 0): (0, 1),
@@ -333,7 +331,6 @@ while True:
 
     token = tokens[line][pos]
 
-
     # Encontró una llave cerrada
     if token == "}":
         # Usaremos unas variables para iterar temporalmente
@@ -419,22 +416,18 @@ errors.sort()
 # Si no hay errors
 if errors == []:
     errors.append("No hay errores!")
-
 errors_file = open("errores.txt", "w")
 for err in errors:
     errors_file.write(err)
-
 # Si hay errores, no hay ejecución del programa
 if errors[0] != "No hay errores!":
     quit()
-
 file.close()
 errors_file.close()
 
 """
     INICIO DE LA EJECUCIÓN DEL CODIGO.TXT
 """
-
 # Leemos la primera linea y el segundo tokens
 ANCHO = int(tokens[0][1])
 # Leemos la segunda linea y el ultimo tokens
@@ -446,7 +439,6 @@ if COLOR_DE_FONDO == (-1, -1, -1):
     print("Linea donde ha ocurrido el error: ")
     print(f"2 {lines[1]}")
     quit()
-
 
 # Esta sera nuestra matriz donde guardaremos los pixeles
 data = []
@@ -475,6 +467,9 @@ while True:
     if line == -1:
         break
 
+    if len(tokens[line]) == 0:
+        continue
+
     # Guardamos la instruccion en una variable por legibilidad
     instruccion = tokens[line][pos]
 
@@ -484,6 +479,10 @@ while True:
     elif RE_Avanzar.match(instruccion):
         line, pos = nextPos(line, pos, tokens)
         
+        
+        if line == -1:
+            continue
+
         # Actualizo la nueva instruccion
         numero = tokens[line][pos]
 
@@ -516,6 +515,9 @@ while True:
         # En caso de que sea Pintar, conseguir el color siguiente
         line, pos = nextPos(line, pos, tokens)
         
+        if line == -1:
+            continue
+
         color = tokens[line][pos]
         color_tupla = obtenerColor(color)
 
@@ -532,7 +534,10 @@ while True:
     elif instruccion == "Repetir":
 
         line, pos = nextPos(line, pos, tokens)
-        
+
+        if line == -1:
+            continue
+
         # Esta parte reconoce la cantidad de iteraciones
         # del repetir
 
