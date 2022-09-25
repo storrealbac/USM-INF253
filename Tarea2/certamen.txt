@@ -1,0 +1,22 @@
+3
+AlternativaSimple
+¿Cual es arespuesta correcta a esta pregunta?
+3
+Esta alternativa
+La tercera alternativa
+La segunda alternativa
+1
+VerdaderoFalso
+A monad is a monoid in the category of endofunctors
+V
+AlternativaMultiple
+¿Cuales de estos juegos usan principalmente cubos ?
+5
+Minecraft
+Terraria
+Beat Saber
+Genshin Impact
+Apex Legends
+2
+1
+3
