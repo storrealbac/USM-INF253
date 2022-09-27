@@ -1,3 +1,5 @@
+#include<stdbool.h>
+
 /* Estructuras */
 typedef struct {
     char enunciado[128];
@@ -29,7 +31,7 @@ typedef struct {
     char tipo[64];
     void* enunciado;
     void* respuesta;
-    bool (*revisar) (void*, void*);
+    bool (*revisar)(void*, void*);
 } tPregunta;
 
 typedef struct {
@@ -47,8 +49,8 @@ tPregunta* crearPregunta(
     tCertamen* certamen,
     char* tipo,
     void* enunciado,
-    bool revisar(void*, void*)
-);(
+    bool (*revisar)(void*, void*)
+);
 
 // Asigna la pregunta a la posicion n_pregunta del certamen
 void asignarPregunta(
@@ -70,7 +72,7 @@ int nCorrectasCertamen(tCertamen certamen);
 int largoCertamen(tCertamen certamen);
 
 // Revisa si la respuesta a la pregunta es correcta
-bool revisarAlternativaSimple(tPregunta pregunta);
-bool revisarAlternativaMultiple(tPregunta pregunta);
-bool revisarVerdaderoFalso(tPregunta pregunta);
-bool revisarCompletar(tPregunta pregunta);
+bool revisarAlternativaSimple(void* enunciado, void* respuesta);
+bool revisarAlternativaMultiple(void* enunciado, void* respuesta);
+bool revisarVerdaderoFalso(void* enunciado, void* respuesta);
+bool revisarCompletar(void* enunciado, void* respuesta);
