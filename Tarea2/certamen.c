@@ -122,14 +122,18 @@ int largoCertamen(tCertamen certamen) {
 }
 
 int nCorrectasCertamen(tCertamen certamen) {
-
     int n_preguntas = largoCertamen(certamen);
     int correctas = 0;
 
-    /*
-    for (size_t i = 0; i < n_preguntas; i++) {
-        certamen.preguntas[i].revisar;
-    }
-    */
 
+    for (size_t i = 0; i < n_preguntas; i++) {
+        tPregunta pregunta_actual = certamen.preguntas[i];
+        void* enunciado = pregunta_actual.enunciado;
+        void* respuesta = pregunta_actual.respuesta;
+
+        if (pregunta_actual.revisar(enunciado, respuesta))
+            correctas++;
+    }
+
+    return correctas;
 }
