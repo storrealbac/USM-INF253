@@ -1,0 +1,22 @@
+
+Completar
+2
+I don’t want to deny who I’ve been. Because even my
+area part of who I am today.
+failures
+Completar
+3
+Un puntero es una variable que almacena la
+de un
+.
+dirección de memoria
+objeto
+Completar
+4
+C es un
+de propósito general desarrollado como evolución al lenguaje
+. Se trata de un lenguaje
+tipado.
+lenguaje de programación
+B
+débilmente
