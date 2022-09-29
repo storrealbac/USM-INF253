@@ -26,7 +26,7 @@ int main() {
     if (fp == NULL) {
         printf("[Error] No existe el archivo certamen.txt");
         return 1;
-    }   
+    }
 
     // Esto seran las cantidad de preguntas     
     int n_preguntas = 0;
@@ -58,7 +58,7 @@ int main() {
             char enunciado[ENUNCIADO_SIZE];
             fgets(enunciado, ENUNCIADO_SIZE, fp);
 
-            size_t enunciado_largo = strlen(enunciado);
+            size_t enunciado_largo = strlen(enunciado) + 1;
             char* enunciadop = malloc(enunciado_largo * sizeof(char));
 
             strcpy(enunciadop, enunciado);
@@ -85,7 +85,7 @@ int main() {
             for (size_t i = 0; i < n_alternativas; i++) {
                 fgets(alternativa, ALTERNATIVA_SIZE, fp);
 
-                size_t alternativa_largo = strlen(alternativa);
+                size_t alternativa_largo = strlen(alternativa) + 1;
                 char* alternativap = malloc(alternativa_largo * sizeof(char));
 
                 strcpy(alternativap, alternativa);
@@ -107,10 +107,6 @@ int main() {
                 DEBUG("<Finalización del proceso de pedir alternativas>\n");
             #endif
 
-            /* para revisar
-            pregunta->revisar(enunciado_alternativa, alternativa_correcta);
-            */
-
             pregunta = crearPregunta(certamen, tipo, enunciado_alternativa, revisarAlternativaSimple);
             asignarPregunta(certamen, pregunta_actual, pregunta);
         }
@@ -120,7 +116,7 @@ int main() {
             char enunciado[ENUNCIADO_SIZE];
             fgets(enunciado, ENUNCIADO_SIZE, fp);
 
-            size_t enunciado_largo = strlen(enunciado);
+            size_t enunciado_largo = strlen(enunciado) + 1;
             char* enunciadop = malloc(enunciado_largo * sizeof(char));
 
             strcpy(enunciadop, enunciado);
@@ -143,7 +139,7 @@ int main() {
 
             for (size_t i = 0; i < n_alternativas; i++) {
                 fgets(alternativa, ALTERNATIVA_SIZE, fp);
-                size_t alternativa_largo = strlen(alternativa);
+                size_t alternativa_largo = strlen(alternativa) + 1;
                 char* alternativap = malloc(alternativa_largo * sizeof(char));
 
                 strcpy(alternativap, alternativa);
@@ -176,7 +172,7 @@ int main() {
             char enunciado[ENUNCIADO_SIZE];
             fgets(enunciado, ENUNCIADO_SIZE, fp);
 
-            size_t enunciado_largo = strlen(enunciado);
+            size_t enunciado_largo = strlen(enunciado) + 1;
             char* enunciadop = malloc(enunciado_largo * sizeof(char));
             strcpy(enunciadop, enunciado);
 
@@ -223,7 +219,7 @@ int main() {
                 char texto[TEXTO_SIZE];
                 fgets(texto, TEXTO_SIZE, fp);
 
-                size_t texto_largo = strlen(texto);
+                size_t texto_largo = strlen(texto) + 1;
                 char* textop = malloc(texto_largo * sizeof(char));
                 strcpy(textop, texto);
 
@@ -235,7 +231,7 @@ int main() {
                 char respuesta[RESPUESTA_SIZE];
                 fgets(respuesta, RESPUESTA_SIZE, fp);
 
-                size_t respuesta_largo = strlen(respuesta);
+                size_t respuesta_largo = strlen(respuesta) + 1;
                 char* respuestap = malloc(respuesta_largo * sizeof(char));
                 strcpy(respuestap, respuesta);
 
@@ -274,7 +270,11 @@ int main() {
             int respuesta;
             scanf("%d", &respuesta);
 
-            printf("Respuesta ingresada: %d\n", respuesta);
+            int* respuestap = malloc(sizeof(int*));
+            *respuestap = respuesta;
+
+            // asignar respuesta
+            certamen->preguntas[i-1].respuesta = respuestap;
         }
 
         else if (strcmp(pregunta.tipo, "AlternativaMultiple") == 0) {
@@ -318,6 +318,8 @@ int main() {
             for (size_t j = 0; j < marcadas; j++)
                 respuestas_definitivas[j] = respuestas[j];
             
+            // asignar respuesta
+            certamen->preguntas[i-1].respuesta = respuestas_definitivas;
             free(respuestas);
         }
 
@@ -329,7 +331,10 @@ int main() {
             printf("Ingrese su respuesta (V/F): ");
             scanf(" %c", &respuesta);
             
-            printf("Respuesta ingresada: %c", respuesta);
+            bool* respuestab = malloc(sizeof(bool*));
+            *respuestab = respuesta == 'V' ? true : false;
+            
+            certamen->preguntas[i-1].respuesta = respuestab;
         }
 
         else if (strcmp(pregunta.tipo, "Completar") == 0) {
@@ -344,19 +349,100 @@ int main() {
                 printf("%s", textos[j]);
                 printf("-> ");
                 fgets(input_usuario, RESPUESTA_SIZE, stdin);
+
+                size_t input_usuario_largo = strlen(input_usuario) + 1;
+                char* input_usuariop = malloc(input_usuario_largo * sizeof(char*));
+                strcpy(input_usuariop, input_usuario);
+
+                respuesta_usuario[j] = input_usuariop;
             }
 
             // imprime el ultimo texto siempre y cuando exista
             if (n_textos > 1)
                 printf("%s", textos[n_textos-1]);
+
+            certamen->preguntas[i-1].respuesta = respuesta_usuario;
+
         }
 
         printf("\n");
     }
 
     printf("\t\t Revisando el certamen ... \n\n");
-
     printf("Obtuviste un %d de %d preguntas correctas!\n", nCorrectasCertamen(*certamen), largoCertamen(*certamen));
+
+    // Liberar memoria (mi vida es triste ;c)
+    for (size_t i = 0; i < largoCertamen(*certamen); i++) {
+        tPregunta* pregunta = &certamen->preguntas[i];
+        if ( strcmp("AlternativaSimple", pregunta->tipo) == 0 ) {
+            tEnunciadoAlternativa* enunciado = pregunta->enunciado;
+            int n_alternativas = enunciado->n_alternativas;
+
+            // liberar todas las alternativas
+            for (size_t j = 0; j < n_alternativas; j++)
+                free(enunciado->alternativas[j]);
+            free(enunciado->alternativas);
+
+            // liberando enunciado
+            free(pregunta->enunciado);
+            free(pregunta->respuesta);
+        }
+
+        else if ( strcmp("VerdaderoFalso", pregunta->tipo) == 0 ) {
+            // liberar ese malloc xD
+            free(pregunta->enunciado);
+            free(pregunta->respuesta);
+        }
+
+        else if ( strcmp("AlternativaMultiple", pregunta->tipo) == 0 ) {
+            
+            tEnunciadoAlternativaMultiple* enunciado = pregunta->enunciado;
+            int n_alternativas = enunciado->n_alternativas;
+
+            // liberar todas las alternativas
+            for (size_t j = 0; j < n_alternativas; j++)
+                free(enunciado->alternativas[j]);
+            free(enunciado->alternativas);
+
+
+            // liberar alternativas correctas
+            free(enunciado->alternativa_correcta);
+
+            // liberando enunciado
+            free(pregunta->respuesta);
+            free(pregunta->enunciado);
+        }
+
+        else if ( strcmp("Completar", pregunta->tipo) == 0 ) {
+            tEnunciadoCompletar* enunciado = pregunta->enunciado;
+            int n_textos = enunciado->n_textos;
+
+            // liberar todas los textos
+            for (size_t j = 0; j < n_textos; j++)
+                free(enunciado->textos[j]);
+            free(enunciado->textos);
+
+            // liberar todas los textos
+            for (size_t j = 0; j < (n_textos-1); j++)
+                free(enunciado->respuestas[j]);
+            free(enunciado->respuestas);
+
+            // liberar las respuestas;
+            char** pregunta_respuesta = pregunta->respuesta;
+            for (size_t j = 0; j < (n_textos-1); j++)
+                free(pregunta_respuesta[j]);
+
+            free(pregunta->respuesta);
+            free(pregunta->enunciado);
+        }
+    }
+
+    // liberando preguntas
+    free(certamen->preguntas);
+
+    // libero certamenuwu
+    free(certamen);
+
 
     return 0;
 }

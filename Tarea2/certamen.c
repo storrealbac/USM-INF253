@@ -125,7 +125,6 @@ int nCorrectasCertamen(tCertamen certamen) {
     int n_preguntas = largoCertamen(certamen);
     int correctas = 0;
 
-
     for (size_t i = 0; i < n_preguntas; i++) {
         tPregunta pregunta_actual = certamen.preguntas[i];
         void* enunciado = pregunta_actual.enunciado;
