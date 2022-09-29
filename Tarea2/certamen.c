@@ -33,6 +33,8 @@ void asignarPregunta(tCertamen* certamen, int n_pregunta, tPregunta* pregunta) {
 
     size_t posicion = n_pregunta-1;
     certamen->preguntas[posicion] = *pregunta;
+
+    free(pregunta);
     
     #ifdef DEBUGGING
         DEBUG("Fin de la asignación de la pregunta ... \n ");

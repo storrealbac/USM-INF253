@@ -16,12 +16,11 @@ const size_t TEXTO_SIZE         = 256;
 int main() {
 
     FILE* fp;
-    char* line = NULL;
 
     size_t len = 0;
     ssize_t read;
 
-    fp = fopen("certamen.txt", "r");
+    fp = fopen("certamen2.txt", "r");
 
     if (fp == NULL) {
         printf("[Error] No existe el archivo certamen.txt");
@@ -59,13 +58,9 @@ int main() {
             fgets(enunciado, ENUNCIADO_SIZE, fp);
 
             size_t enunciado_largo = strlen(enunciado) + 1;
-            char* enunciadop = malloc(enunciado_largo * sizeof(char));
-
-            strcpy(enunciadop, enunciado);
-
+  
             #ifdef DEBUGGING
                 DEBUG("Entrando a Alternativa Simple --- \n");
-                DEBUG("Enunciado -> %s", enunciadop);
             #endif
 
 
@@ -117,13 +112,9 @@ int main() {
             fgets(enunciado, ENUNCIADO_SIZE, fp);
 
             size_t enunciado_largo = strlen(enunciado) + 1;
-            char* enunciadop = malloc(enunciado_largo * sizeof(char));
-
-            strcpy(enunciadop, enunciado);
 
             #ifdef DEBUGGING
                 DEBUG("Entrando a Alternativa Multiple --- >>\n");
-                DEBUG("Enunciado -> %s\n", enunciadop);
             #endif
             
 
@@ -173,8 +164,7 @@ int main() {
             fgets(enunciado, ENUNCIADO_SIZE, fp);
 
             size_t enunciado_largo = strlen(enunciado) + 1;
-            char* enunciadop = malloc(enunciado_largo * sizeof(char));
-            strcpy(enunciadop, enunciado);
+
 
             #ifdef DEBUGGING
                 DEBUG("Entrando a VerdaderoFalso --- \n");
@@ -242,6 +232,7 @@ int main() {
             asignarPregunta(certamen, pregunta_actual, pregunta);
         }
         
+        free(tipop);
     }
 
     // Inicio de la pedida de datos al Certamen
@@ -353,7 +344,6 @@ int main() {
                 size_t input_usuario_largo = strlen(input_usuario) + 1;
                 char* input_usuariop = malloc(input_usuario_largo * sizeof(char*));
                 strcpy(input_usuariop, input_usuario);
-
                 respuesta_usuario[j] = input_usuariop;
             }
 
@@ -422,7 +412,7 @@ int main() {
                 free(enunciado->textos[j]);
             free(enunciado->textos);
 
-            // liberar todas los textos
+            // liberar todos los textos
             for (size_t j = 0; j < (n_textos-1); j++)
                 free(enunciado->respuestas[j]);
             free(enunciado->respuestas);
@@ -443,6 +433,7 @@ int main() {
     // libero certamenuwu
     free(certamen);
 
+    fclose(fp);
 
     return 0;
 }
