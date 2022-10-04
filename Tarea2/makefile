@@ -1,5 +1,5 @@
 all:
-	gcc main.c -o program
+	gcc main.c -o certamen
 
 debug:
 	clear

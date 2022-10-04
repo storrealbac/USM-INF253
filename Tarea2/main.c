@@ -1,17 +1,20 @@
 #define _GNU_SOURCE
 
+// librerias
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
 #include <string.h>
 
+// las funciones implementadas
 #include "certamen.c"
 
+// constantes
 const size_t ENUNCIADO_SIZE     = 128;
 const size_t TIPO_SIZE          = 64;
-const size_t ALTERNATIVA_SIZE   = 256;
-const size_t RESPUESTA_SIZE     = 256;
-const size_t TEXTO_SIZE         = 256;
+const size_t ALTERNATIVA_SIZE   = 128;
+const size_t RESPUESTA_SIZE     = 128;
+const size_t TEXTO_SIZE         = 128;
 
 int main() {
 
@@ -20,7 +23,7 @@ int main() {
     size_t len = 0;
     ssize_t read;
 
-    fp = fopen("certamen2.txt", "r");
+    fp = fopen("certamen.txt", "r");
 
     if (fp == NULL) {
         printf("[Error] No existe el archivo certamen.txt");
@@ -228,7 +231,7 @@ int main() {
                 enunciado_completar->respuestas[i] = respuestap;
 
             }
-            pregunta = crearPregunta(certamen, tipo, enunciado_completar, revisarVerdaderoFalso);
+            pregunta = crearPregunta(certamen, tipo, enunciado_completar, revisarCompletar);
             asignarPregunta(certamen, pregunta_actual, pregunta);
         }
         
