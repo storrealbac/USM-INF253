@@ -4,6 +4,17 @@ public class NodoEvento extends Nodo {
     private String descripcion, alternativa1, alternativa2;
     private Item resultado1, resultado2;
     
+    public NodoEvento(Integer id) {
+        super(id);
+        inicializarEvento();
+    }
+
+    private void inicializarEvento() {
+
+        
+
+    }
+
     void interactuar(Jugador jugador) {
 
     }

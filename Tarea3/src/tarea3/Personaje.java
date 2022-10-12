@@ -5,6 +5,10 @@ public class Personaje {
     private String nombre;
     private Integer dinero, hp_actual, hp_total, danio, defensa;
 
+    public Personaje() {
+        
+    }
+
     void combate(Personaje personaje) {
         
     }

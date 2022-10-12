@@ -6,6 +6,10 @@ public class NodoTienda extends Nodo {
     
     private List<Item> inventario;
 
+    public NodoTienda(Integer id) {
+        super(id);
+    }
+
     void interactuar(Jugador jugador) {
 
     }

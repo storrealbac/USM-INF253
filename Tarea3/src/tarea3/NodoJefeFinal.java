@@ -1,8 +1,12 @@
 package tarea3;
 
-public class NodoJefeFinal extends Nodo{
+public class NodoJefeFinal extends Nodo {
     private Personaje jefe;
     
+    public NodoJefeFinal(Integer id) {
+        super(id);
+    }
+
     void interactuar(Jugador jugador) {
 
     }

@@ -3,7 +3,13 @@ package tarea3;
 public class Item {
     private Integer precio, recuperar_hp, aumentar_hp_total, aumentar_danio, aumentar_defensa;
 
-    public Item() {
+    public Item(
+        Integer precio,
+        Integer recuperar_hp,
+        Integer aumentar_hp_total,
+        Integer aumentar_danio,
+        Integer aumentar_defensa
+    ) {
 
     }
 
