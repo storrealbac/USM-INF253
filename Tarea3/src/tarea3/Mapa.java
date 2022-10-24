@@ -16,6 +16,7 @@ public class Mapa {
     public Mapa(Integer profundidad) {
         this.profundidad = profundidad;
         nodo_inicial = new NodoInicial(0);
+        nodo_actual = nodo_inicial;
         
         generarMapa(nodo_inicial);
     }
@@ -60,10 +61,12 @@ public class Mapa {
 
     }
 
+    // ver los siguientes nodos
     void verMapa() {
-
-        
-
+        System.out.println("Posibles siguientes caminos: ");
+        for (Nodo n : nodo_actual.getSiguientesNodos()) {
+            System.out.println("    [ID] " + n.getID() + " - [Tipo de nodo] " + n.getClass().getSimpleName());
+        }
     }
 
     void avanzar() {

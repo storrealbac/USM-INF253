@@ -10,9 +10,7 @@ public class NodoEvento extends Nodo {
     }
 
     private void inicializarEvento() {
-
         
-
     }
 
     void interactuar(Jugador jugador) {

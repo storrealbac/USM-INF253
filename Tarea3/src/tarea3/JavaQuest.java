@@ -16,8 +16,7 @@ class JavaQuest {
         Jugador jugador = new Jugador(nombre_jugador);
         
         Mapa mapa = new Mapa(5);
-
-
+        
         sc.close();
     }
 }
