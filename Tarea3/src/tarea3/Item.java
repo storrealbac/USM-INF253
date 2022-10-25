@@ -17,6 +17,13 @@ public class Item {
         this.aumentar_defensa = aumentar_defensa;
     }
 
+    void getStats() {
+        System.out.println("  HP:" + getRecuperarHP());
+        System.out.println("  Aumento de HP:" + getAumentarHPTotal());
+        System.out.println("  Aumento de DMG:" + getAumentarDanio());
+        System.out.println("  Aumento de defensa:" + getAumentarDefensa());
+    }
+
     void aplicar(Jugador jugador) {
         Integer vida_jugador        = jugador.getHPActual();
         Integer vida_total_jugador  = jugador.getHPTotal();
@@ -25,12 +32,24 @@ public class Item {
 
         jugador.setDanio(dmg_jugador + this.aumentar_danio);
         jugador.setDefensa(defensa_jugador + this.aumentar_defensa);
-        jugador.setHPActual(vida_jugador + this.recuperar_hp);
         jugador.setHPTotal(vida_total_jugador + this.aumentar_hp_total);
+        jugador.setHPActual(Math.min(vida_jugador + this.recuperar_hp, jugador.getHPTotal()));
 
         // Se agrega el item
         jugador.agregarItem(this);
         System.out.println(" Se han aplicado todos los efectos en el jugador ");
+    }
+
+    public static Item generarItemAleatorio() {
+        Integer precio, recuperar_hp, aumentar_hp_total, aumentar_danio, aumentar_defensa;
+        precio = Util.getRandomNumber(45, 100);
+        recuperar_hp = Util.getRandomNumber(0, 10);
+        aumentar_danio = Util.getRandomNumber(0, 10);
+        aumentar_hp_total = Util.getRandomNumber(0, 10);
+        aumentar_defensa = Util.getRandomNumber(0, 10);
+
+        Item nuevo_item = new Item(precio, recuperar_hp, aumentar_hp_total, aumentar_danio, aumentar_defensa);
+        return nuevo_item;
     }
 
     // Getters

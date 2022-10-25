@@ -2,6 +2,7 @@ package tarea3;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 public class NodoTienda extends Nodo {
     
@@ -13,31 +14,36 @@ public class NodoTienda extends Nodo {
         // Generando items de forma aleatoria
         Integer cantidad_items = Util.getRandomNumber(5, 7);
         for (Integer i = 0; i < cantidad_items; i++)
-            inventario.add(generarItemAleatorio());
+            inventario.add(Item.generarItemAleatorio());
     }
 
-    private static Item generarItemAleatorio() {
-        Integer precio, recuperar_hp, aumentar_hp_total, aumentar_danio, aumentar_defensa;
-        precio = Util.getRandomNumber(20, 30);
-        recuperar_hp = Util.getRandomNumber(0, 10);
-        aumentar_danio = Util.getRandomNumber(0, 10);
-        aumentar_hp_total = Util.getRandomNumber(0, 10);
-        aumentar_defensa = Util.getRandomNumber(0, 10);
-
-        Item nuevo_item = new Item(precio, recuperar_hp, aumentar_hp_total, aumentar_danio, aumentar_defensa);
-        return nuevo_item;
-    }
 
     void interactuar(Jugador jugador) {
+        if (this.inventario.size() == 0) {
+            System.out.println("No hay mas items en la tienda, cerrando la tienda");
+            return;
+        }
         System.out.println(" - Inventario de la tienda -");
-    
+
         Integer numero = 1;
         for (Item it : inventario) {
             System.out.println(numero++ + ".- Precio: $" + it.getPrecio());
-            System.out.println("  HP:" + it.getRecuperarHP());
-            System.out.println("  Aumento de HP:" + it.getAumentarHPTotal());
-            System.out.println("  Aumento de DMG:" + it.getAumentarDanio());
-            System.out.println("  Aumento de defensa:" + it.getAumentarDefensa());
+            it.getStats();
+        }
+
+        // Le aseguro que acá no cierro el scanner porque lo hago en el main; 
+        // a pesar de que no se cierre en la clase, cerrar 2 veces un scanner con stream
+        // de System.in provoca un error, por que se cierra dos veces el input stream
+        Scanner sc = new Scanner(System.in);
+        System.out.print("Elija la opcion que desea (Cualquier numero fuera de rango es para salir de la interaccion): ");
+        Integer opcion = sc.nextInt();
+
+        if (opcion > 0 || opcion <= numero) {
+            this.inventario.get(opcion-1).aplicar(jugador);
+            this.inventario.remove(opcion-1);
+            this.interactuar(jugador);
+        } else {
+            System.out.println("Fuera del rango de valores, saliendo de la tienda!");
         }
     }
     

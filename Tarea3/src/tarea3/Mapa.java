@@ -128,7 +128,7 @@ public class Mapa {
         // a pesar de que no se cierre en la clase, cerrar 2 veces un scanner con stream
         // de System.in provoca un error, por que se cierra dos veces el input stream
         Scanner sc = new Scanner(System.in);
-        System.out.println("Elija el numero del nodo que quiere elegir: ");
+        System.out.print("Elija el numero del nodo que quiere elegir: ");
         Integer opcion = sc.nextInt();        
 
         if (opcion > numero || opcion < 0) {
@@ -137,8 +137,7 @@ public class Mapa {
         }
 
         System.out.println("Cambiando de quest...");
-        System.out.println(numero);
-        nodo_actual = nodo_actual.getSiguientesNodos().get(numero-1);
+        nodo_actual = nodo_actual.getSiguientesNodos().get(opcion-1);
         nodo_actual.interactuar(jugador);
     }
 

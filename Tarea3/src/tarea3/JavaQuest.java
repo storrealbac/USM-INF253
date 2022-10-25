@@ -6,7 +6,7 @@ class JavaQuest {
 
     public static void main(String[] args) {
         System.out.println("------------------------");
-        System.out.println(" Bienvenido a JavaQuest ");
+        System.out.println(" Bienvenido a JavaQuest y las aventuras del Kiwi");
         System.out.println("------------------------");
 
         Scanner sc = new Scanner(System.in);
