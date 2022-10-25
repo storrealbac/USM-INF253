@@ -10,7 +10,11 @@ public class Item {
         Integer aumentar_danio,
         Integer aumentar_defensa
     ) {
-
+        this.precio = precio;
+        this.recuperar_hp = recuperar_hp;
+        this.aumentar_hp_total = aumentar_hp_total;
+        this.aumentar_danio = aumentar_danio;
+        this.aumentar_defensa = aumentar_defensa;
     }
 
     void aplicar(Jugador jugador) {
@@ -24,6 +28,8 @@ public class Item {
         jugador.setHPActual(vida_jugador + this.recuperar_hp);
         jugador.setHPTotal(vida_total_jugador + this.aumentar_hp_total);
 
+        // Se agrega el item
+        jugador.agregarItem(this);
         System.out.println(" Se han aplicado todos los efectos en el jugador ");
     }
 

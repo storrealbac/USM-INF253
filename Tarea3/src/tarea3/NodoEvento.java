@@ -14,7 +14,7 @@ public class NodoEvento extends Nodo {
     }
 
     void interactuar(Jugador jugador) {
-
+        
     }
 
     // Getters

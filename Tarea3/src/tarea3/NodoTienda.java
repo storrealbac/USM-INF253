@@ -1,13 +1,31 @@
 package tarea3;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class NodoTienda extends Nodo {
     
-    private List<Item> inventario;
+    private List<Item> inventario = new ArrayList<Item>();
 
     public NodoTienda(Integer id) {
         super(id);
+
+        // Generando items de forma aleatoria
+        Integer cantidad_items = Util.getRandomNumber(5, 7);
+        for (Integer i = 0; i < cantidad_items; i++)
+            inventario.add(generarItemAleatorio());
+    }
+
+    private static Item generarItemAleatorio() {
+        Integer precio, recuperar_hp, aumentar_hp_total, aumentar_danio, aumentar_defensa;
+        precio = Util.getRandomNumber(20, 30);
+        recuperar_hp = Util.getRandomNumber(0, 10);
+        aumentar_danio = Util.getRandomNumber(0, 10);
+        aumentar_hp_total = Util.getRandomNumber(0, 10);
+        aumentar_defensa = Util.getRandomNumber(0, 10);
+
+        Item nuevo_item = new Item(precio, recuperar_hp, aumentar_hp_total, aumentar_danio, aumentar_defensa);
+        return nuevo_item;
     }
 
     void interactuar(Jugador jugador) {
@@ -34,7 +52,8 @@ public class NodoTienda extends Nodo {
         }
 
         // aplicar el item
-        this.inventario.get(indice).aplicar(jugador);;
+        Item item_a_aplicar = this.inventario.get(indice);
+        item_a_aplicar.aplicar(jugador);
         this.inventario.remove((int)indice);
     }
 

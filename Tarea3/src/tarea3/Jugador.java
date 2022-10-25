@@ -1,12 +1,13 @@
 package tarea3;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Jugador extends Personaje {
  
-    private List<Item> items_aplicados;
+    private List<Item> items_aplicados = new ArrayList<Item>();
 
-    public Jugador(String nombre) {
+    Jugador(String nombre) {
         super();
 
         this.setNombre(nombre);
@@ -18,6 +19,7 @@ public class Jugador extends Personaje {
     }
 
     void verEstado() {
+        System.out.println();
         System.out.println(" - Estadisticas actuales -");
         System.out.println("    Dinero: " + this.getDinero());
         System.out.println("    HP: " + this.getHPActual() + "/" + this.getHPTotal());
@@ -26,6 +28,7 @@ public class Jugador extends Personaje {
     }
 
     void verItems() {
+        System.out.println();
         System.out.println(" - Items adquiridos -");
         Integer i = 1; // Numero de item
         for (Item it : items_aplicados) {
@@ -37,9 +40,15 @@ public class Jugador extends Personaje {
         }
     }
 
+
     // Getters
     List<Item> getItemsAplicados() {
         return this.items_aplicados;
+    }
+
+    // Setters
+    void agregarItem(Item item) {
+        items_aplicados.add(item);
     }
 
 }
