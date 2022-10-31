@@ -38,10 +38,10 @@ public class NodoTienda extends Nodo {
         System.out.print("Elija la opcion que desea (Cualquier numero fuera de rango es para salir de la interaccion): ");
         Integer opcion = sc.nextInt();
 
-        if (opcion > 0 || opcion <= numero) {
-            this.inventario.get(opcion-1).aplicar(jugador);
-            this.inventario.remove(opcion-1);
-            this.interactuar(jugador);
+        if (opcion > 0 && opcion <= inventario.size()) {
+            //this.inventario.get(opcion-1).aplicar(jugador);
+            //this.inventario.remove(opcion-1);
+            comprar(opcion, jugador);
         } else {
             System.out.println("Fuera del rango de valores, saliendo de la tienda!");
         }
@@ -59,8 +59,17 @@ public class NodoTienda extends Nodo {
 
         // aplicar el item
         Item item_a_aplicar = this.inventario.get(indice);
+        if ( jugador.getDinero() < item_a_aplicar.getPrecio() ) {
+            System.out.println("No tienes el suficiente dinero!");
+            this.interactuar(jugador);
+            return;
+        }
+
+        jugador.setDinero(jugador.getDinero() - item_a_aplicar.getPrecio());
+        System.out.println("El item ha costado " + item_a_aplicar.getPrecio() + " monedas!");
         item_a_aplicar.aplicar(jugador);
         this.inventario.remove((int)indice);
+        this.interactuar(jugador);
     }
 
     // Getters

@@ -16,7 +16,7 @@ class JavaQuest {
         String nombre_jugador = sc.nextLine();
         Jugador jugador = new Jugador(nombre_jugador);
 
-        Integer profundidad = 5;
+        Integer profundidad = 10;
         Mapa mapa = new Mapa(profundidad);
 
         // Interactuar con el inicial
