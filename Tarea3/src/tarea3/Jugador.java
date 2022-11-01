@@ -7,6 +7,7 @@ public class Jugador extends Personaje {
  
     private List<Item> items_aplicados = new ArrayList<Item>();
 
+    // Crear un jugador por defecto
     Jugador(String nombre) {
         super();
 
@@ -18,6 +19,11 @@ public class Jugador extends Personaje {
         this.setDefensa(1);
     }
 
+    /**
+    * Ver estado del jugador por la consola 
+    * 
+    * @return void
+    */
     void verEstado() {
         System.out.println();
         System.out.println(" - Estadisticas actuales -");
@@ -27,6 +33,11 @@ public class Jugador extends Personaje {
         System.out.println("    Defensa: " + this.getDefensa());
     }
 
+    /**
+    * Ver lista de items por consola
+    * 
+    * @return void
+    */
     void verItems() {
         System.out.println();
         System.out.println(" - Items adquiridos -");
@@ -41,12 +52,12 @@ public class Jugador extends Personaje {
     }
 
 
-    // Getters
+    // Todos los getters
     List<Item> getItemsAplicados() {
         return this.items_aplicados;
     }
 
-    // Setters
+    // Todos los setters
     void agregarItem(Item item) {
         items_aplicados.add(item);
     }

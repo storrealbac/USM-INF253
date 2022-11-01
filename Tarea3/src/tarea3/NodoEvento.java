@@ -13,6 +13,11 @@ public class NodoEvento extends Nodo {
         inicializarEvento();
     }
 
+    /**
+    * Una funcion privada para inicializar cosas, fuera del constructor.
+    * 
+    * @return void
+    */
     private void inicializarEvento() {
         List<String> descripciones = new ArrayList<String>();
         descripciones.add("Kiwi se ha convertido en un dios generoso y ha hecho un evento especial para ti, tienes que ser sabio y elegir la opcion correcta, o te arrepentiras!");
@@ -29,6 +34,13 @@ public class NodoEvento extends Nodo {
         setResultado2(Item.generarItemAleatorio());
     }
 
+    /**
+    * Interactua con el nodo evento: Le mostrara dos opciones
+    * 
+    * @param jugador: Jugador que interactuara
+    * 
+    * @return void
+    */
     void interactuar(Jugador jugador) {
         System.out.println("--- Descripcion de la Quest ---");
         System.out.println(" " + getDescripcion());
@@ -62,7 +74,7 @@ public class NodoEvento extends Nodo {
         
     }
 
-    // Getters
+    // Todos los getters
     String getDescripcion() {
         return this.descripcion;
     }
@@ -83,7 +95,7 @@ public class NodoEvento extends Nodo {
         return this.resultado2;
     }
 
-    // Setters
+    // Todos los setters
     void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
     }

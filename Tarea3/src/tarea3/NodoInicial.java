@@ -6,6 +6,13 @@ public class NodoInicial extends Nodo {
         super(id);
     }
 
+    /**
+     * Interactua con el nodo inicial: Cuenta la historia
+     * 
+     * @param jugador: Jugador que interactuara
+     * 
+     * @return void
+     */
     void interactuar(Jugador jugador) {
         System.out.println(
             "\nBienvenido " + jugador.getNombre() + ", eres un sansano promedio, esta es la historia de un jugador que quería "+

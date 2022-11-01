@@ -17,7 +17,13 @@ public class NodoTienda extends Nodo {
             inventario.add(Item.generarItemAleatorio());
     }
 
-
+    /**
+    * Interactua con el nodo Tienda: Muestra opciones en la tienda
+    *
+    * @param jugador: Jugador que interactuara
+    *
+    * @return void
+    */
     void interactuar(Jugador jugador) {
         if (this.inventario.size() == 0) {
             System.out.println("No hay mas items en la tienda, cerrando la tienda");
@@ -47,8 +53,11 @@ public class NodoTienda extends Nodo {
         }
     }
     
-    // el indice esta aumentado en 1
-    // ya que las listas son de 0 a n-1
+    /**
+     * Permite al jugador comprar algun objeto
+     * @param compra: El numero de item que quiere comprar
+     * @param jugador: Al jugador que se le aplicara el item a comprar
+     */
     void comprar(Integer compra, Jugador jugador) {
         Integer indice = compra-1;
 
@@ -72,7 +81,7 @@ public class NodoTienda extends Nodo {
         this.interactuar(jugador);
     }
 
-    // Getters
+    // Todos los getters
     List<Item> getInventario() {
         return this.inventario;
     }

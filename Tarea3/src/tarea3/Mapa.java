@@ -22,6 +22,7 @@ public class Mapa {
     private Map<Integer, ArrayList<Nodo>> profundidades;
     private SortedSet<Integer> visitados;
 
+    // Crear un mapa con una profundidad
     public Mapa(Integer profundidad) {
         this.profundidad = profundidad;
         nodo_inicial = new NodoInicial(0);
@@ -34,11 +35,17 @@ public class Mapa {
         DFS(nodo_inicial, 1);
     }
 
+    /**
+    * Generar un mapa con nodos aleatorios desde un nodo inicial
+    * 
+    * @param nodo_inicial: El nodo donde comenzara el mapa
+    *
+    * @return void
+    */
     private void generarMapa(NodoInicial nodo_inicial) {
         SortedSet<Edge> edges = GraphGenerator.Generar(profundidad);
 
         Integer cantidad_nodos = edges.last().y + 1;
-        //System.out.println("Largo array: " + cantidad_nodos);
 
         Nodo[] tipos_nodos = new Nodo[cantidad_nodos];
 
@@ -74,8 +81,21 @@ public class Mapa {
 
     }
 
-    // Como es un DAG, podemos hacer un DFS y ver la profundidad desde el nodo inicial en O(V + A)
+
+    /**
+     * Recorre nuestro mapa para descubrir las profundidades
+     * 
+     * @param nodo: El nodo que se ocupara en la recursion para el DFS
+     * @param profundidad: la acumulacion de la profundidad
+     * 
+     * @return void
+     */
     private void DFS(Nodo nodo, Integer profundidad) {
+        // Como es un DAG, podemos hacer un DFS y ver la profundidad 
+        // desde el nodo inicial en O(V + A)
+        // Cabe recalcar que sirve tambien porque para todo nodo, siempre esta conectado
+        // a uno con una profundidad menor, si no fuera el caso, deberiamos usar un BFS
+    
         profundidades.putIfAbsent(profundidad, new ArrayList<>());
         ArrayList<Nodo> lista_profundidades = profundidades.get(profundidad);
 
@@ -88,7 +108,13 @@ public class Mapa {
             DFS(vecino, profundidad + 1);
     }
     
-    // ver los siguientes nodos
+
+    /**
+    *  
+    * Ver el mapa, implica, ver todos los niveles y los siguientes
+    * 
+    * @return void
+    */
     void verMapa() {
         System.out.println();
         System.out.println(" --- Niveles del juego --- ");
@@ -114,6 +140,11 @@ public class Mapa {
 
     }
 
+    /**
+     * Avanzar a un nodo, desde la posicion actual
+     * 
+     * @param jugador: El jugador que se movera
+     */
     void avanzar(Jugador jugador) {
         System.out.println();
         System.out.println("---- Siguientes quest desde la quest actual! ----");
@@ -141,7 +172,7 @@ public class Mapa {
         nodo_actual.interactuar(jugador);
     }
 
-    // Getters;
+    // Todos los getters
     Integer getProfundidad() {
         return this.profundidad;
     }
@@ -154,7 +185,7 @@ public class Mapa {
         return this.nodo_actual;
     }
 
-    // Setters
+    // Todos los setters
     void setProfundidad(Integer profundidad) {
         this.profundidad = profundidad;
     }

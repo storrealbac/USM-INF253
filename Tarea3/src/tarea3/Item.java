@@ -3,6 +3,7 @@ package tarea3;
 public class Item {
     private Integer precio, recuperar_hp, aumentar_hp_total, aumentar_danio, aumentar_defensa;
 
+    // Constructor para crear un item desde 0 con sus parametros
     public Item(
         Integer precio,
         Integer recuperar_hp,
@@ -17,6 +18,11 @@ public class Item {
         this.aumentar_defensa = aumentar_defensa;
     }
 
+    /**
+    * Ver estadisticas de un item
+    *
+    * @return void  
+    */
     void getStats() {
         System.out.println("  HP:" + getRecuperarHP());
         System.out.println("  Aumento de HP:" + getAumentarHPTotal());
@@ -24,6 +30,13 @@ public class Item {
         System.out.println("  Aumento de defensa:" + getAumentarDefensa());
     }
 
+    /**
+    * Aplicar item a un jugador
+    *
+    * @param jugador: Jugador que se le aplicara el item
+    *
+    * @return void  
+    */
     void aplicar(Jugador jugador) {
         Integer vida_jugador        = jugador.getHPActual();
         Integer vida_total_jugador  = jugador.getHPTotal();
@@ -40,6 +53,11 @@ public class Item {
         System.out.println(" Se han aplicado todos los efectos en el jugador ");
     }
 
+    /**
+    * Generar un item cualquiera
+    *
+    * @return Item: Item aleatorio
+    */
     public static Item generarItemAleatorio() {
         Integer precio, recuperar_hp, aumentar_hp_total, aumentar_danio, aumentar_defensa;
         precio = Util.getRandomNumber(45, 100);
@@ -52,7 +70,7 @@ public class Item {
         return nuevo_item;
     }
 
-    // Getters
+    // Todos los getters
     Integer getPrecio() {
         return this.precio;
     }

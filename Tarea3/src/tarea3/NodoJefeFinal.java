@@ -3,6 +3,7 @@ package tarea3;
 public class NodoJefeFinal extends Nodo {
     private Personaje jefe;
     
+    // Inicializa un jefe final random
     public NodoJefeFinal(Integer id) {
         super(id);
 
@@ -15,6 +16,13 @@ public class NodoJefeFinal extends Nodo {
 
     }
 
+    /**
+     * Interactua con el nodo Jefe Final: Peleas con Kiwi
+     * 
+     * @param jugador: Jugador que interactuara
+     * 
+     * @return void
+     */
     void interactuar(Jugador jugador) {
         // Combatiendo
         while (true) {

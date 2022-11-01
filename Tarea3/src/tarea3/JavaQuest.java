@@ -16,14 +16,15 @@ class JavaQuest {
         String nombre_jugador = sc.nextLine();
         Jugador jugador = new Jugador(nombre_jugador);
 
-        Integer profundidad = 10;
+        System.out.print("Elige el coeficiente de profundidad: ");
+        Integer profundidad = sc.nextInt();
         Mapa mapa = new Mapa(profundidad);
 
         // Interactuar con el inicial
         mapa.getNodoActual().interactuar(jugador);
 
 
-        // Jugador
+        // Ciclo de juego
         while (true) {
             
             System.out.println("---> Opciones disponibles: <---");

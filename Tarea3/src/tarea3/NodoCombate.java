@@ -8,43 +8,23 @@ public class NodoCombate extends Nodo {
         enemigo = new Personaje(true);
     }
 
+    /**
+     * Interactua con el nodo combate: Pelea con el enemigo del nivel
+     * 
+     * @param jugador: Jugador que interactuara
+     * 
+     * @return void
+     */
     void interactuar(Jugador jugador) {
-
-        // Combatiendo
-        while (true) {
-            System.out.println("Combatiendo...");
-
-            System.out.print("Vida jugador: ");
-            jugador.verVida();
-
-            System.out.print("Vida enemigo: ");
-            enemigo.verVida();
-
-            jugador.combate(enemigo);
-
-            // Si murio el jugador
-            if (jugador.getHPActual() == 0) {
-                System.out.println("Perdiste! :(");
-                System.exit(0);
-            }
-            // Si murio el enemigo
-            else if (enemigo.getHPActual() == 0) {
-                System.out.println("Le ganaste al enemigo!");
-                // Dandole el dinero al jugador
-                jugador.setDinero( jugador.getDinero() + enemigo.getDinero());
-                System.out.println("Ganaste " + enemigo.getDinero() + " monedas!");
-                break;
-            }
-
-
-        }
-
+        jugador.combate(enemigo);
     }
 
+    // Todos los getters
     Personaje getEnemigo() {
         return this.enemigo;
     }
     
+    // Todos los setters
     void setEnemigo(Personaje enemigo) {
         this.enemigo = enemigo;
     }

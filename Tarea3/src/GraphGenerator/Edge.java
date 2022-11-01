@@ -1,5 +1,6 @@
 package GraphGenerator;
 
+
 public class Edge implements Comparable<Edge> {
     public final Integer x;
     public final Integer y;
