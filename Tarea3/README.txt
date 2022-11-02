@@ -15,3 +15,10 @@ se puede correr el programa de dos maneras
 (Al final, son el mismo comando, pero uno es mas corto C;)
 
 Luego de eso puedes jugar tu aventura con Kiwi!
+
+java --version; Del PC donde se testeo!
+```
+openjdk 14.0.2 2020-07-14
+OpenJDK Runtime Environment (build 14.0.2+12-Ubuntu-120.04)
+OpenJDK 64-Bit Server VM (build 14.0.2+12-Ubuntu-120.04, mixed mode, sharing)
+```
