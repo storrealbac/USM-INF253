@@ -29,8 +29,9 @@ public class NodoTienda extends Nodo {
             System.out.println("No hay mas items en la tienda, cerrando la tienda");
             return;
         }
+        System.out.println();
+        System.out.println("Tu dinero: " + jugador.getDinero());
         System.out.println(" - Inventario de la tienda -");
-
         Integer numero = 1;
         for (Item it : inventario) {
             System.out.println(numero++ + ".- Precio: $" + it.getPrecio());

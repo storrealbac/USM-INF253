@@ -10,10 +10,10 @@ public class NodoJefeFinal extends Nodo {
         jefe = new Personaje(true);
 
         jefe.setDanio(jefe.getDanio() + Util.getRandomNumber(10, 35));
-        jefe.setDefensa(jefe.getDefensa() + Util.getRandomNumber(30, 40));
-        jefe.setHPTotal(jefe.getHPTotal() + Util.getRandomNumber(450, 1000));
-        jefe.setHPActual(jefe.getHPActual());
-
+        // 0 defensa, pero mucha vida
+        jefe.setDefensa(0);
+        jefe.setHPTotal(jefe.getHPTotal() + Util.getRandomNumber(9000, 10000));
+        jefe.setHPActual(jefe.getHPTotal());
     }
 
     /**
